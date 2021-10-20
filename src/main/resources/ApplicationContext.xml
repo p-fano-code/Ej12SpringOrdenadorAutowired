@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!-- Creacion de las RAM -->
+
+	<bean id="ramGraficaIntegrada" class="tienda.Ram">
+		<constructor-arg value= "#{T(java.lang.Math).random() * 50 + 20 }"></constructor-arg>
+		<constructor-arg value="1.2"></constructor-arg>
+		<constructor-arg value="Tercera"></constructor-arg>
+	</bean>
+	<bean id="ramGraficaDedicada" class="tienda.Ram">
+		<constructor-arg value="#{T(java.lang.Math).random() * 50 + 20 }"></constructor-arg>
+		<constructor-arg value="2.4"></constructor-arg>
+		<constructor-arg value="Cuarta"></constructor-arg>
+	</bean>
+	<bean id="ramOrdenador" class="tienda.Ram">
+		<constructor-arg value="#{T(java.lang.Math).random() * 50 + 20 }"></constructor-arg>
+		<constructor-arg value="3.2"></constructor-arg>
+		<constructor-arg value="Quinta"></constructor-arg>
+	</bean>
+
+	<!-- Creacion de las Tarjetas Graficas -->
+
+	<bean id="tarjetaIntegrada" class="tienda.TarjetaGrafica">
+		<constructor-arg value="#{T(java.lang.Math).random() * 150 + 80 }"></constructor-arg>
+		<constructor-arg value="Intel"></constructor-arg>
+		<constructor-arg ref="ramGraficaIntegrada"></constructor-arg>
+		<constructor-arg value="Graphics"></constructor-arg>
+	</bean>
+	<bean id="graficaDedicada" class="tienda.TarjetaGrafica">
+		<constructor-arg value="#{T(java.lang.Math).random() * 150 + 80 }"></constructor-arg>
+		<constructor-arg value="AMD"></constructor-arg>
+		<constructor-arg ref="ramGraficaDedicada"></constructor-arg>
+		<constructor-arg value="Gaming Ultra"></constructor-arg>
+	</bean>
+
+	<!-- Creacion de los Perifericos -->
+	
+	<bean id="raton" class="tienda.Periferico">
+		<constructor-arg value="raton"></constructor-arg>
+		<constructor-arg value="#{T(java.lang.Math).random() * 30 + 10 }"></constructor-arg>
+		<constructor-arg value="Mars"></constructor-arg>
+	</bean>
+
+	<!-- Creacion de las listas -->
+	<!-- Lista de RAMS -->
+	<bean id="listaRam" class="java.util.ArrayList">
+		<constructor-arg>
+			<list value-type="tienda.Ram">
+				<ref bean="ramGraficaIntegrada" />
+				<ref bean="ramGraficaDedicada" />
+				<ref bean="ramOrdenador" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- Lista de Tarjetas Graficas -->
+	<bean id="listaTarjetasGraficas" class="java.util.ArrayList">
+		<constructor-arg>
+			<list value-type="tienda.TarjetaGrafica">
+				<ref bean="tarjetaIntegrada" />
+				<ref bean="graficaDedicada" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- Lista de Perifericos-->
+	<bean id="listaPerifericos" class="java.util.ArrayList">
+		<constructor-arg>
+			<list value-type="tienda.Periferico">
+				<ref bean="raton" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- Creación de placa base -->
+	<bean id="placaBase" class="tienda.PlacaBase">
+				<constructor-arg value="#{T(java.lang.Math).random() * 300 + 100 }"></constructor-arg>
+				<constructor-arg value="Gigabyte"></constructor-arg>
+				<constructor-arg value="Gaming Ultra Durable"></constructor-arg>
+	</bean>
+	
+	<!-- Creacion de preocesador -->
+	<bean id="procesador" class="tienda.Procesador" autowire = "byName">
+				<property name="precio" value="#{T(java.lang.Math).random() * 300 + 100 }"></property>
+				<property name="hz" value="2.5"></property>
+				<property name="marca" value="#{procesador.setRandomMarca()}"></property>
+	</bean>
+	
+	<!-- Creación del ordenador -->
+	
+	<bean id="ordenador" class="tienda.Ordenador" autowire="byName">
+		<property name="precio" value="#{procesador.precio + placaBase.precio +
+										 ramGraficaIntegrada.precio + ramGraficaDedicada.precio
+										 + ramOrdenador.precio + tarjetaIntegrada.precio
+										 + graficaDedicada.precio + raton.precio }"></property>
+		<property name="marca" value="#{ordenador.setRandomMarca()}"></property>		
+	</bean>
+
+</beans>
